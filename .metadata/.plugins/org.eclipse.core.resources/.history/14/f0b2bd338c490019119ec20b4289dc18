@@ -1,0 +1,14 @@
+package Repositories;
+
+import java.util.List;
+
+import Entities.RecipeEntity;
+import Services.CrudRepository;
+import Services.RecipeModel;
+
+public class RecipeRepository extends CrudRepository<RecipeModel, String>  {
+	// inherited methods: save, saveAll, fidnById, existsbyId, fidnAll(), findallByIds(ITerable ids), count
+	// delete, deleteAll(iterable id), deleteAll
+	public List<RecipeEntity> findByCategoryIgnoringCase(String category); 
+	
+}

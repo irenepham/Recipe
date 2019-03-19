@@ -1,0 +1,17 @@
+package Exception;
+
+@ResponseStatus(code = HttpStatus.NOT_FOUND, reason="recipe was not found based on given id")
+public class RecipeNotFoundException extends RuntimeException{
+	
+	private static final long serialVersionUID = 2425186511795179438L;
+	
+
+	public RecipeNotFoundException(String message) { 
+		super(message); 
+	}
+	
+	public RecipeNotFoundException(String message, Throwable cause) { 
+		super(message, cause); 
+	}
+	
+}

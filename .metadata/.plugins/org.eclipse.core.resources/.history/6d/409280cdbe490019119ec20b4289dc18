@@ -1,0 +1,39 @@
+package Services;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import Entities.RecipeEntity;
+import Repositories.RecipeRepository;
+
+public class RecipeService {
+	private RecipeRepository recipeRepository; 
+	
+	public RecipeEntity createRecipe(RecipeEntity recipe) { 
+		recipe.setDateAdded(LocalDateTime.now());  
+		recipe.setDateModified(LocalDateTime.now()); 
+		// recipe.setUserId() //TODO 
+		return this.recipeRepository.save(recipe); 
+	}
+	
+	public RecipeEntity updateRecipe(RecipeEntity recipe) { 
+		recipe.setDateModified(LocalDateTime.now());
+		return this.recipeRepository.save(recipe); 
+	}
+	
+	public void deleteRecipe(RecipeEntity recipe) { 
+		this.recipeRepository.delete(recipe);
+	}
+	
+	public void deleteRecipeById(String id) { 
+		this.recipeRepository.deleteById(id); 
+	}
+	
+	public List<RecipeEntity> getRecipeByCategory(String category) { 
+		return this.recipeRepository.findByCategoryIgnoringCase; 
+	}
+	
+	public List<RecipeEntity> getRecipeByUser(String userId) { 
+		return this.recipeRepository.findByUserId(String userId); 
+	}
+}

@@ -1,0 +1,10 @@
+package Controller;
+
+/*
+ * REST API for all requests relating to creating, updating, and deleting recipe data. 
+ */
+@RestController
+@RequestMapping("/recipe")
+public class RecipeController {
+
+}

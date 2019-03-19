@@ -1,0 +1,18 @@
+package Models;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name="RECIPE")
+public class RecipeModel {
+
+	private String objectId; 
+	private String name; 
+	private String ingredients; //comma separated value of ingredients (not the best) 
+	private Integer servingSize; 
+	private String category; //maybe an enum? 
+	private String notes; 
+	private LocalDateTime dateAdded;  
+	private LocalDateTIme dateModified; 
+	
+}

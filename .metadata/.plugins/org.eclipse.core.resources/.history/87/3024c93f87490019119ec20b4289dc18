@@ -1,0 +1,16 @@
+package Controller;
+
+import Models.RecipeEntity;
+
+/*
+ * REST API for all requests relating to creating, updating, and deleting recipe data. 
+ */
+@RestController
+@RequestMapping("/recipe")
+public class RecipeController {
+
+	@RequestMapping(value = "/add/recipe", method = RequestMethod.POST) 
+	public Response addRecipe (@RequestParam("recipe") RecipeEntity newRecipe){ //not sure about verbage
+		
+	}
+}

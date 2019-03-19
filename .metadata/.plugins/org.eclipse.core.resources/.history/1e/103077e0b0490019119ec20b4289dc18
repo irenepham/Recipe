@@ -1,0 +1,25 @@
+package Controller;
+
+public class RecipeError {
+	private int errorCode; 
+	private String message; 
+	private String recipeId;
+	
+	public RecipeError (int errorCode, String message, String recipeId) { 
+		this.errorCode = errorCode; 
+		this.message = message; 
+		this.recipeId = recipeId; 
+	}
+	
+	public int getErrorCode() { 
+		return this.errorCode; 
+	}
+	
+	public String getMessage() { 
+		return this.message;
+	}
+	
+	public String getRecipeId() { 
+		return this.recipeId;
+	}
+}

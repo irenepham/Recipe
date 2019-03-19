@@ -1,0 +1,72 @@
+package Controller;
+
+import java.util.List;
+import java.util.Optional;
+
+import Entities.RecipeEntity;
+import RecipeModel.RecipeModel;
+import Services.RecipeService;
+import Services.RecipeServiceImpl;
+import Util.RestPreconditions;
+
+/*
+ * REST API for all requests relating to creating, updating, and deleting recipe data. 
+ */
+@RestController
+@RequestMapping("/recipes")
+public class RecipeController {
+	
+	@Autowired 
+	private RecipeService recipeService; 
+	
+	// NEED TO HANDLE ILLEGAL ARGUMENT EXCEPTION 
+	
+
+	@PostMapping 
+	@ResponseStatus(HttpStatus.CREATED)
+	public RecipeEntity addRecipe (@RequestBody RecipeEntity newRecipe){ 
+		RestPreconditions.checkNotNull(newRecipe, "new recipe"); 
+		return this.recipeService.createRecipe(newRecipe);
+	}
+	
+	
+	@PutMapping(value = "/{recipeId}") 
+	@ResponseStatus(HttpStatus.OK)
+	public RecipeEntity updateRecipe (@PathVariable("recipeId") String id, @RequestBody RecipeEntity updatedRecipe) { //what if the ids dont match
+		RestPreconditions.checkNotNull(updatedRecipe, "updated recipe"); 
+		RestPreconditions.checkExistence(this.recipeService.getRecipeById(id), id); 
+		if(!id.equals(updatedRecipe.getObjectId())) { 
+			throw new IllegalArgumentException("The updated recipe must have the same id as the specified recipe"); // BAD 
+		}
+		return this.recipeService.updateRecipe(updatedRecipe); 
+	}
+
+	@DeleteMapping(value = "/{recipeId}") 
+	@ResponseStatus(HttpStatus.OK)
+	public void deleteRecipeById (@PathVariable("recipeId") String id) { 
+		RestPreconditions.checkExistence(this.recipeService.getRecipeById(id), id); 
+		this.recipeService.deleteRecipeById(id);
+	}
+	
+	@GetMapping 
+	@ResponseStatus(HttpStatus.OK)
+	public List<RecipeEntity> getAllRecipes() { 
+		return this.recipeService.getAllRecipes(); 
+	}
+	
+	@GetMapping(value="/{recipeId}") //throw resource not found 
+	@ResponseStatus(HttpStatus.OK)
+	public RecipeEntity getById(@PathVariable ("recipeId") String id) { 
+		Optional<RecipeEntity> optRecipe = this.recipeService.getRecipeById(id);
+		return this.recipeService.getRecipeById(id); 
+	}
+	
+	@GetMapping(value="/filter")
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<List<RecipeEntity>> getRecipesInCategory (@RequestParam String category) { 
+		RestPreconditions.checkNotNull(category, "category"); 
+		List<RecipeEntity> filteredResults = this.recipeService.getRecipeByCategory(); 
+		return ResponseEntity.ok()
+				.body()
+	}
+}

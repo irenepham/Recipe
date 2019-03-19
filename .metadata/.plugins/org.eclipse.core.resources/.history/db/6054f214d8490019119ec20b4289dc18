@@ -1,0 +1,12 @@
+package Controller;
+
+import java.util.List;
+
+import Entities.RecipeEntity;
+
+public class RecipeResponse {
+	private String message; 
+	private RecipeEntity recipe; 
+	private List<RecipeEntity> recipes; 
+	
+}

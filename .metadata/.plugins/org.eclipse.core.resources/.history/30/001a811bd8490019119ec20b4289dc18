@@ -1,0 +1,65 @@
+package Controller;
+
+import java.util.List;
+import java.util.Optional;
+
+import Entities.RecipeEntity;
+import Services.RecipeService;
+import Services.RecipeServiceImpl;
+import Util.RestPreconditions;
+
+/*
+ * REST API for all requests relating to creating, updating, and deleting recipe data. 
+ */
+@RestController
+@RequestMapping("/recipes")
+public class RecipeController {
+	
+	@Autowired 
+	private RecipeService recipeService; 
+
+	@PostMapping 
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<RecipeEntity> addRecipe (@RequestBody RecipeEntity newRecipe){ 
+		RestPreconditions.checkNotNull(newRecipe, "new recipe");
+		RecipeEntity createdRecipe = this.recipeService.createRecipe(newRecipe);
+		return ResponseEntity.status(HttpStatus.CREATED).body(createdRecipe); 
+	}
+	
+	
+	@PutMapping(value = "/{recipeId}") 
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<RecipeEntity> updateRecipe (@PathVariable("recipeId") String id, @RequestBody RecipeEntity updatedRecipe) { //what if the ids dont match
+		RestPreconditions.checkNotNull(updatedRecipe, "updated recipe"); 
+		this.recipeService.getRecipeById(id).orElseThrow(() -> new RecipeNotFoundException(String.format("Cannot update recipe with id %s since it does not exist", id)); 
+		if(!id.equals(updatedRecipe.getObjectId())) { 
+			throw new RecipeConflictException("The updated recipe has id %s and this does not match that of the given recipe: %s", id, updatedRecipe.getObjectId());
+		}
+		return ResponseEntity.ok().body(this.recipeService.updateRecipe(updatedRecipe)); 
+	}
+
+	@DeleteMapping(value = "/{recipeId}") 
+	public ResponseEntity deleteRecipeById (@PathVariable("recipeId") String id) { 
+		this.recipeService.getRecipeById(id).orElseThrow(() -> new RecipeNotFoundException(String.format("Cannot delete recipe with id %s since it does not exist", id))); 
+		this.recipeService.deleteRecipeById(id);
+		return ResponseEntity.noContent(); 
+	}
+	
+	@GetMapping 
+	public ResponseEntity<List<RecipeEntity>> getAllRecipes() { 
+		return ResponseEntity.ok().body(this.recipeService.getAllRecipes()); 
+	}
+	
+	@GetMapping(value="/{recipeId}") 
+	public ResponseEntity<RecipeEntity> getById(@PathVariable ("recipeId") String id) { 
+		RecipeEntity recipe = this.recipeService.getRecipeById(id).orElseThrowd(() -> new RecipeNotFoundException(String.format("Recipe with the id: %s does not exist", id))); 
+		return ResponseEntity.ok().body(recipe); 
+	}
+	
+	@GetMapping(value="/filter")
+	public ResponseEntity<List<RecipeEntity>> getRecipesInCategory (@RequestParam String category) { 
+		RestPreconditions.checkNotNull(category, "category"); 
+		List<RecipeEntity> filteredResults = this.recipeService.getRecipeByCategory(category); 
+		return ResponseEntity.ok().body(filteredResults); 
+	}
+}

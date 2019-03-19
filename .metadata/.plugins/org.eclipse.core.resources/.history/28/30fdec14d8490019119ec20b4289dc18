@@ -1,0 +1,15 @@
+package Controller;
+
+@ResponseStatus(code = HttpStatus.CONFLICT, reason="recipe data conflict")
+public class RecipeConflictException extends RuntimeException {
+
+	private static final long serialVersionUID = -1633451137139658056L;
+	
+	public RecipeConflictException(String message, Throwable cause) { 
+		super(message, cause); 
+	}
+	
+	public RecipeConflictException(String message) { 
+		super(message); 
+	}
+}

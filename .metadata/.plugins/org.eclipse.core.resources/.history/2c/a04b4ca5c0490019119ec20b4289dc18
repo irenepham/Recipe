@@ -1,0 +1,19 @@
+package Controller;
+
+public class RecipeNotFoundException extends RuntimeException{
+	
+	private static final long serialVersionUID = 2425186511795179438L;
+	
+	private String importId; 
+
+	public RecipeNotFoundException(String message, String importId) { 
+		super(message); 
+		this.importId = importId; 
+	}
+	
+	public String getImportId() { 
+		return this.importId; 
+	}
+
+	
+}
